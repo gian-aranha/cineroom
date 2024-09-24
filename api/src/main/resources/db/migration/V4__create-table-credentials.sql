@@ -6,4 +6,4 @@ CREATE TABLE credentials(
 
     PRIMARY KEY(id),
     CONSTRAINT fk_credentials_user_id FOREIGN KEY(user_id) REFERENCES users(id)
-);
+)
