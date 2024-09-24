@@ -15,5 +15,5 @@ USE cineroom;
 O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão criadas no banco a partir do momento que o projeto foi executado.
 
 # Informações
-O projeto está sendo desenvolvido na versão 21 do Java, então utilize essa para desenvolver o código.
-É indicado que seja utilizado o IntelliJ como IDE de desenvolvimento, pois já existem configurações no ``.gitignore` tratando dos arquivos gerados por essa IDE
+- O projeto está sendo desenvolvido na versão 21 do Java, então utilize essa para desenvolver o código.
+- É indicado que seja utilizado o IntelliJ como IDE de desenvolvimento, pois já existem configurações no ``.gitignore` tratando dos arquivos gerados por essa IDE
