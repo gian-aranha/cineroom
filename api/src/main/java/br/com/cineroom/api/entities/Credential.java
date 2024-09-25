@@ -1,5 +1,6 @@
 package br.com.cineroom.api.entities;
 
+import br.com.cineroom.api.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -24,5 +25,11 @@ public class Credential {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Credential(User user, UserDTO userDTO) {
+        this.email = userDTO.email();
+        this.password = userDTO.password();
+        this.user = user;
+    }
 
 }

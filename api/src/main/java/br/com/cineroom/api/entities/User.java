@@ -1,5 +1,6 @@
 package br.com.cineroom.api.entities;
 
+import br.com.cineroom.api.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,5 +21,13 @@ public class User {
     private String name;
     private Integer sessions;
     private Integer reviews;
+
+    public User(UserDTO userDTO) {
+        this.username = userDTO.username();
+        this.email = userDTO.email();
+        this.name = userDTO.name();
+        this.sessions = 0;
+        this.reviews = 0;
+    }
 
 }
