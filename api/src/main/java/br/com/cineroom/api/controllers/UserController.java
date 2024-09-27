@@ -1,7 +1,7 @@
 package br.com.cineroom.api.controllers;
 
-import br.com.cineroom.api.dtos.UserDTO;
-import br.com.cineroom.api.dtos.UserReturnDTO;
+import br.com.cineroom.api.dtos.user.UserDTO;
+import br.com.cineroom.api.dtos.user.UserReturnDTO;
 import br.com.cineroom.api.entities.Credential;
 import br.com.cineroom.api.entities.User;
 import br.com.cineroom.api.repositories.CredentialRepository;
@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
@@ -38,5 +36,12 @@ public class UserController {
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new UserReturnDTO(user));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserReturnDTO> listUser(@PathVariable Long id) {
+        User user = userRepository.getReferenceById(id);
+
+        return ResponseEntity.ok(new UserReturnDTO(user));
     }
 }

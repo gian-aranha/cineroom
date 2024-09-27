@@ -1,4 +1,4 @@
-package br.com.cineroom.api.dtos;
+package br.com.cineroom.api.dtos.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

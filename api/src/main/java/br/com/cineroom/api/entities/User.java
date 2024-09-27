@@ -1,6 +1,6 @@
 package br.com.cineroom.api.entities;
 
-import br.com.cineroom.api.dtos.UserDTO;
+import br.com.cineroom.api.dtos.user.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
