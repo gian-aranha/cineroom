@@ -17,3 +17,29 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
 # Informações
 - O projeto está sendo desenvolvido na versão 21 do Java, então utilize essa para desenvolver o código.
 - É indicado que seja utilizado o IntelliJ como IDE de desenvolvimento, pois já existem configurações no `.gitignore` tratando dos arquivos gerados por essa IDE
+
+# Documentação - Endpoints
+
+- Session `/sessions`
+    - POST
+        Criar nova sessão:
+            `/new`
+    -GET
+        Pegar todas as sessões:
+            `/getAll`
+        Pegar sessão por ID:
+            `/id/{id}`
+        Pegar sessões do usuário:
+            `/user/{userId}`
+        Pegar sessão pelo código:
+            `/code/{code}`
+    -PUT
+        Atualizar sessão:
+            `/update/{id}`
+    -DELETE
+        Deletar sessão pelo id:
+            `/delete/{id}`
+        Deletar todas as sessões:
+            `/deleteAll`
+        Deletar todas as sessões de um usuário:
+            `/deleteByUser/{userId}`
