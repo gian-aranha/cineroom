@@ -22,24 +22,24 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
 
 - Session `/sessions`
     - POST
-        Criar nova sessão:
+        - Criar nova sessão:
             `/new`
-    -GET
-        Pegar todas as sessões:
+    - GET
+        - Pegar todas as sessões:
             `/getAll`
-        Pegar sessão por ID:
+        - Pegar sessão por ID:
             `/id/{id}`
-        Pegar sessões do usuário:
+        - Pegar sessões do usuário:
             `/user/{userId}`
-        Pegar sessão pelo código:
+        - Pegar sessão pelo código:
             `/code/{code}`
-    -PUT
-        Atualizar sessão:
+    - PUT
+        - Atualizar sessão:
             `/update/{id}`
-    -DELETE
-        Deletar sessão pelo id:
+    - DELETE
+        - Deletar sessão pelo id:
             `/delete/{id}`
-        Deletar todas as sessões:
+        - Deletar todas as sessões:
             `/deleteAll`
-        Deletar todas as sessões de um usuário:
+        - Deletar todas as sessões de um usuário:
             `/deleteByUser/{userId}`
