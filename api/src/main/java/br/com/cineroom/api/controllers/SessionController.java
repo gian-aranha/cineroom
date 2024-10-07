@@ -22,9 +22,9 @@ public class SessionController {
     private SessionRepository sessionRepository;
 
     // Criar uma nova sessão usando DTO
-    @PostMapping("/new")
+    @PostMapping
     @Transactional
-    public ResponseEntity<?> CreateSession(@RequestBody @Valid SessionDTO sessionDTO, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createSession(@RequestBody @Valid SessionDTO sessionDTO, UriComponentsBuilder uriBuilder) {
         Session session = new Session(sessionDTO);
         session.setCreatedAt(LocalDateTime.now()); // Define a data de criação
         sessionRepository.save(session);
@@ -35,8 +35,8 @@ public class SessionController {
     }
 
     // Retornar todas as sessões
-    @GetMapping("/getAll")
-    public ResponseEntity<Iterable<SessionReturnDTO>> GetAllSessions() {
+    @GetMapping
+    public ResponseEntity<Iterable<SessionReturnDTO>> getAllSessions() {
         var sessions = sessionRepository.findAll().stream()
                 .map(SessionReturnDTO::new)
                 .toList();
@@ -44,8 +44,8 @@ public class SessionController {
     }
 
     // Retornar sessão por ID
-    @GetMapping("/id/{id}")
-    public ResponseEntity<SessionReturnDTO> GetSessionById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<SessionReturnDTO> getSessionById(@PathVariable Long id) {
         var session = sessionRepository.findById(id).map(SessionReturnDTO::new);
         return session.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -53,7 +53,7 @@ public class SessionController {
 
     // Retornar sessões por usuário
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Iterable<SessionReturnDTO>> GetSessionByUser(@PathVariable Long userId) {
+    public ResponseEntity<Iterable<SessionReturnDTO>> getSessionByUser(@PathVariable Long userId) {
         var sessions = sessionRepository.findByUserId(userId).stream()
                 .map(SessionReturnDTO::new)
                 .toList();
@@ -62,16 +62,16 @@ public class SessionController {
 
     // Retornar sessão por código
     @GetMapping("/code/{code}")
-    public ResponseEntity<SessionReturnDTO> GetSessionByCode(@PathVariable String code) {
+    public ResponseEntity<SessionReturnDTO> getSessionByCode(@PathVariable String code) {
         return sessionRepository.findByCode(code)
                 .map(session -> ResponseEntity.ok(new SessionReturnDTO(session)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Atualizar sessão
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<SessionReturnDTO> UpdateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
+    public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
         return sessionRepository.findById(id).map(existingSession -> {
             existingSession.updateFromDTO(sessionDTO);
             sessionRepository.save(existingSession);
@@ -80,9 +80,9 @@ public class SessionController {
     }
 
     // Deletar sessão por ID
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> DeleteSession(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSession(@PathVariable Long id) {
         if (sessionRepository.existsById(id)) {
             sessionRepository.deleteById(id);
             return ResponseEntity.ok().build();
@@ -90,18 +90,10 @@ public class SessionController {
         return ResponseEntity.notFound().build();
     }
 
-    // Deletar todas as sessões
-    @DeleteMapping("/deleteAll")
-    @Transactional
-    public ResponseEntity<?> DeleteAllSessions() {
-        sessionRepository.deleteAll();
-        return ResponseEntity.ok().build();
-    }
-
     // Deletar sessões por usuário
-    @DeleteMapping("/deleteByUser/{userId}")
+    @DeleteMapping("/user/{userId}")
     @Transactional
-    public ResponseEntity<?> DeleteSessionByUser(@PathVariable Long userId) {
+    public ResponseEntity<?> deleteSessionByUser(@PathVariable Long userId) {
         var sessions = sessionRepository.findByUserId(userId);
         sessions.forEach(session -> sessionRepository.deleteById(session.getId()));
         return ResponseEntity.ok().build();
