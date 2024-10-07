@@ -21,7 +21,7 @@ public class SessionController {
     @Autowired
     private SessionRepository sessionRepository;
 
-    // Criar uma nova sessão usando DTO
+    // create new session
     @PostMapping
     @Transactional
     public ResponseEntity<?> createSession(@RequestBody @Valid SessionDTO sessionDTO, UriComponentsBuilder uriBuilder) {
@@ -34,7 +34,7 @@ public class SessionController {
         return ResponseEntity.created(uri).body(new SessionReturnDTO(session));
     }
 
-    // Retornar todas as sessões
+    // return all sessions
     @GetMapping
     public ResponseEntity<Iterable<SessionReturnDTO>> getAllSessions() {
         var sessions = sessionRepository.findAll().stream()
@@ -43,7 +43,7 @@ public class SessionController {
         return ResponseEntity.ok(sessions);
     }
 
-    // Retornar sessão por ID
+    // return session by ID
     @GetMapping("/{id}")
     public ResponseEntity<SessionReturnDTO> getSessionById(@PathVariable Long id) {
         var session = sessionRepository.findById(id).map(SessionReturnDTO::new);
@@ -51,7 +51,7 @@ public class SessionController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Retornar sessões por usuário
+    // return session by user
     @GetMapping("/user/{userId}")
     public ResponseEntity<Iterable<SessionReturnDTO>> getSessionByUser(@PathVariable Long userId) {
         var sessions = sessionRepository.findByUserId(userId).stream()
@@ -60,7 +60,7 @@ public class SessionController {
         return ResponseEntity.ok(sessions);
     }
 
-    // Retornar sessão por código
+    // return session by code
     @GetMapping("/code/{code}")
     public ResponseEntity<SessionReturnDTO> getSessionByCode(@PathVariable String code) {
         return sessionRepository.findByCode(code)
@@ -68,7 +68,7 @@ public class SessionController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Atualizar sessão
+    // update session by ID
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
@@ -79,7 +79,7 @@ public class SessionController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Deletar sessão por ID
+    // delete session by ID
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteSession(@PathVariable Long id) {
@@ -90,7 +90,7 @@ public class SessionController {
         return ResponseEntity.notFound().build();
     }
 
-    // Deletar sessões por usuário
+    // delete all sessions by user
     @DeleteMapping("/user/{userId}")
     @Transactional
     public ResponseEntity<?> deleteSessionByUser(@PathVariable Long userId) {
