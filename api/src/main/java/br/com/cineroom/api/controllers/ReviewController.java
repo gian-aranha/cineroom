@@ -28,6 +28,7 @@ public class ReviewController {
     @Autowired
     private UserRepository userRepository;
 
+    // create new review
     @PostMapping
     @Transactional
     public ResponseEntity<?> createReview(@RequestBody ReviewDTO reviewDTO, UriComponentsBuilder uriBuilder) {
@@ -41,6 +42,7 @@ public class ReviewController {
         return ResponseEntity.created(uri).body(new ReviewReturnDTO(review));
     }
 
+    // get a review by its ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getReviewById(@PathVariable Long id) {
         var review = reviewRepository.getReferenceById(id);
@@ -48,6 +50,7 @@ public class ReviewController {
         return ResponseEntity.ok(new ReviewReturnDTO(review));
     }
 
+    // get all reviews by its user ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getReviewsByUserId(@PathVariable Long userId) {
         var reviews = reviewRepository.findAllByUserId(userId).stream()
@@ -56,6 +59,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    // update a review by its ID
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<?> updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
@@ -66,6 +70,7 @@ public class ReviewController {
         return ResponseEntity.ok(new ReviewReturnDTO(review));
     }
 
+    // delete a review by its ID
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteReview(@PathVariable Long id) {
