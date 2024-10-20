@@ -31,7 +31,7 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
 - Session `/sessions`
     - POST
         - Criar nova sessão:
-            `/new`
+            `/`
     - GET
         - Pegar todas as sessões:
             `/` -> é so dar get na endpoint `/sessions`
