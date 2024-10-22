@@ -65,7 +65,6 @@ public class ReviewController {
     public ResponseEntity<?> updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
         var review = reviewRepository.getReferenceById(id);
         review.updateReview(reviewDTO);
-        reviewRepository.save(review);
 
         return ResponseEntity.ok(new ReviewReturnDTO(review));
     }

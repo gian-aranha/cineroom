@@ -46,7 +46,7 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
 - Reviews `/reviews`
    - POST
         - Criar nova review:
-            `/new`
+            `/`
    - GET
         - Pegar todas as reviews do usuário:
             `/user/{userId}`
