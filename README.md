@@ -20,29 +20,38 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
 
 # Documentação - Endpoints
 
+- Users `/users`
+    - POST
+        - Criar novo usuário:
+            `/`
+    - GET
+        - Pegar usuário pelo Id:
+            `/{id}`
+
 - Session `/sessions`
     - POST
         - Criar nova sessão:
-            `/new`
+            `/`
     - GET
         - Pegar todas as sessões:
-            `/getAll`
+            `/` -> é so dar get na endpoint `/sessions`
         - Pegar sessão por ID:
-            `/id/{id}`
+            `/{id}`
         - Pegar sessões do usuário:
             `/user/{userId}`
         - Pegar sessão pelo código:
             `/code/{code}`
     - PUT
         - Atualizar sessão:
-            `/update/{id}`
+            `/{id}`
     - DELETE
         - Deletar sessão pelo id:
-            `/delete/{id}`
+            `/{id}`
         - Deletar todas as sessões:
             `/deleteAll`
         - Deletar todas as sessões de um usuário:
             `/deleteByUser/{userId}`
+
 - Reviews `/reviews`
    - POST
         - Criar nova review:
@@ -58,3 +67,4 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
    - DELETE
         - Deletar review pelo id:
             `/{id}`
+
