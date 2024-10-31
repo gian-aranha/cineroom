@@ -50,4 +50,21 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
         - Deletar todas as sessões:
             `/deleteAll`
         - Deletar todas as sessões de um usuário:
+            `/deleteByUser/{userId}`
+
+- Reviews `/reviews`
+   - POST
+        - Criar nova review:
+            `/`
+   - GET
+        - Pegar todas as reviews do usuário:
             `/user/{userId}`
+        - Pegar review por ID:
+            `/{id}`
+   - PUT
+        - Atualizar review:
+            `/{id}`
+   - DELETE
+        - Deletar review pelo id:
+            `/{id}`
+
