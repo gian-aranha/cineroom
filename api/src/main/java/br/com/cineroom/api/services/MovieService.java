@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class MovieService {
 
@@ -13,73 +16,29 @@ public class MovieService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String convertMovies(String genreName){
-        String genreId = "0";
-
-        switch (genreName) {
-            case "action":
-                genreId = "28";
-                break;
-            case "adventure":
-                genreId = "12";
-                break;
-            case "animation":
-                genreId = "16";
-                break;
-            case "comedy":
-                genreId = "35";
-                break;
-            case "crime":
-                genreId = "80";
-                break;
-            case "documentary":
-                genreId = "99";
-                break;
-            case "drama":
-                genreId = "18";
-                break;
-            case "family":
-                genreId = "10751";
-                break;
-            case "fantasy":
-                genreId = "14";
-                break;
-            case "history":
-                genreId = "36";
-                break;
-            case "horror":
-                genreId = "27";
-                break;
-            case "music":
-                genreId = "10402";
-                break;
-            case "mystery":
-                genreId = "9648";
-                break;
-            case "romance":
-                genreId = "10749";
-                break;
-            case "science fiction":
-                genreId = "878";
-                break;
-            case "tv movie":
-                genreId = "10770";
-                break;
-            case "thriller":
-                genreId = "53";
-                break;
-            case "war":
-                genreId = "10752";
-                break;
-            case "western":
-                genreId = "37";
-                break;
-            default:
-                genreId = "0";
-                break;
+    public String convertMovies(String genreName) {
+        switch (genreName.toLowerCase()) {
+            case "action": return "28";
+            case "adventure": return "12";
+            case "animation": return "16";
+            case "comedy": return "35";
+            case "crime": return "80";
+            case "documentary": return "99";
+            case "drama": return "18";
+            case "family": return "10751";
+            case "fantasy": return "14";
+            case "history": return "36";
+            case "horror": return "27";
+            case "music": return "10402";
+            case "mystery": return "9648";
+            case "romance": return "10749";
+            case "science fiction": return "878";
+            case "tv movie": return "10770";
+            case "thriller": return "53";
+            case "war": return "10752";
+            case "western": return "37";
+            default: return null;  // Retorna null se o gênero for inválido
         }
-
-        return genreId;
     }
 
     public String getPopularMovies() {
@@ -89,13 +48,19 @@ public class MovieService {
         return response.getBody();
     }
 
-    public String getMoviesByGenre(String genreName) throws Exception {
-        String tmdbUrl = "https://api.themoviedb.org/3/discover/movie";
-        String genreId = convertMovies(genreName);
-        if(genreId.equals("0")){
-            throw new Exception("Invalid genre");
+    public String getMoviesByGenres(List<String> genres) throws Exception {
+        // Converte os nomes dos gêneros para IDs
+        String genreIds = genres.stream()
+            .map(this::convertMovies)
+            .filter(id -> id != null)  // Filtra qualquer valor nulo (gênero inválido)
+            .collect(Collectors.joining(",")); // Junta os IDs com vírgulas
+
+        if (genreIds.isEmpty()) {
+            throw new Exception("Nenhum gênero válido foi fornecido.");
         }
-        String url = String.format("%s?api_key=%s&with_genres=%s", tmdbUrl, apiKey, genreId);
+
+        String tmdbUrl = "https://api.themoviedb.org/3/discover/movie";
+        String url = String.format("%s?api_key=%s&with_genres=%s", tmdbUrl, apiKey, genreIds);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         return response.getBody();
     }
