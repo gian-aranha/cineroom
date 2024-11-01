@@ -28,6 +28,14 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
         - Pegar usuário pelo Id:
             `/{id}`
 
+    - FOMATO OBJETO USER
+        {
+            "username":"paulovreis",
+            "email":"paulo@email.com",
+            "name":"Paulo V",
+            "password":"12345"
+        }
+
 - Session `/sessions`
     - POST
         - Criar nova sessão:
@@ -47,10 +55,22 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
     - DELETE
         - Deletar sessão pelo id:
             `/{id}`
-        - Deletar todas as sessões:
-            `/deleteAll`
         - Deletar todas as sessões de um usuário:
-            `/deleteByUser/{userId}`
+            `/user/{userId}`
+
+    - FORMATO OBJETO SESSION
+        {
+            "code": "teste123",
+            "category": "SUPERHERO", 
+            "usersLimit": 5,
+            "status": "ACTIVE",
+            "content": "This is a test session edited.",
+            "createdAt": "2024-10-05T12:00:00", 
+            "user": {
+                "id": 1,
+                "username": "paulovreis"
+            }
+        }
 
 - Reviews `/reviews`
    - POST
@@ -68,3 +88,29 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
         - Deletar review pelo id:
             `/{id}`
 
+    - FORMATO OBJETO REVIEW
+        {
+            "userId": 123,
+            "sessionId": 456,
+            "content": "Muito bom, gostei da experiência.",
+            "rating": 5,
+            "comment": "Recomendo a todos!"
+        }
+
+
+- API de filmes `/movies`
+    - GET
+        - Pegar os filmes populares:
+            `/`
+    - POST
+        - Pegar os filmes de acordo com gênero:
+            `/by-genre` -> deve ser passado uma lista no corpo com os gêneros em inglês, dessa forma: `["action", "comedy", "drama"]`
+            OBS: Não precisa do {} passa a lista direto mesmo
+
+# Orientações
+- Ao receber os objetos dos filmes, existe um campo chamado `poster_path`, ele é somente o final da URL para visualizar o poster do filme. Dessa forma, para ter a URL completa, é necessário concatenar o `poster_path` com o link `https://image.tmdb.org/t/p/{tamanho}/{poster_path}`
+- Os tamanhos são:
+    `w300` -> 300px de largura
+    `w780` -> 720px de largura
+    `w1280` -> 1280px de largura
+    `original` -> Tamanho original
