@@ -9,6 +9,7 @@ import br.com.cineroom.api.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,18 @@ public class UserController {
     @Autowired
     private CredentialRepository credentialRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     @Transactional
     public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO, UriComponentsBuilder uriBuilder) {
         User user = new User(userDTO);
         userRepository.save(user);
 
-        Credential credential = new Credential(user, userDTO);
+        String hashedPassword = passwordEncoder.encode(userDTO.password());
+
+        Credential credential = new Credential(user, userDTO, hashedPassword);
         credentialRepository.save(credential);
 
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();

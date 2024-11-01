@@ -32,9 +32,9 @@ public class Credential  implements UserDetails {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Credential(User user, UserDTO userDTO) {
+    public Credential(User user, UserDTO userDTO, String password) {
         this.email = userDTO.email();
-        this.password = userDTO.password();
+        this.password = password;
         this.user = user;
     }
 
