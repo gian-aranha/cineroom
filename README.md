@@ -29,13 +29,15 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
             `/{id}`
 
     - FOMATO OBJETO USER
+    ```
         {
             "username":"paulovreis",
             "email":"paulo@email.com",
             "name":"Paulo V",
             "password":"12345"
         }
-
+   ```
+       
 - Session `/sessions`
     - POST
         - Criar nova sessão:
@@ -59,7 +61,8 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
             `/user/{userId}`
 
     - FORMATO OBJETO SESSION
-        {
+    ```
+         {
             "code": "teste123",
             "category": "SUPERHERO", 
             "usersLimit": 5,
@@ -71,6 +74,7 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
                 "username": "paulovreis"
             }
         }
+    ```
 
 - Reviews `/reviews`
    - POST
@@ -89,13 +93,15 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
             `/{id}`
 
     - FORMATO OBJETO REVIEW
-        {
+    ```
+         {
             "userId": 123,
             "sessionId": 456,
             "content": "Muito bom, gostei da experiência.",
             "rating": 5,
             "comment": "Recomendo a todos!"
         }
+    ```
 
 
 - API de filmes `/movies`
@@ -108,6 +114,8 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
             OBS: Não precisa do {} passa a lista direto mesmo
 
 # Orientações
+- Os únicos endpoints que aceitam requisições sem token JWT são `/users` (POST) e `/login`
+- Para conseguir o token JWT, é necessário fazer login na aplicação, passando o username e a senha do usuário
 - Ao receber os objetos dos filmes, existe um campo chamado `poster_path`, ele é somente o final da URL para visualizar o poster do filme. Dessa forma, para ter a URL completa, é necessário concatenar o `poster_path` com o link `https://image.tmdb.org/t/p/{tamanho}/{poster_path}`
 - Os tamanhos são:
     `w300` -> 300px de largura
