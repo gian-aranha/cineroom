@@ -40,24 +40,24 @@ public class Session {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Long userId;
+    private User user;
 
-    public Session(SessionDTO sessionDTO){
+    public Session(SessionDTO sessionDTO, User user){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.userId = sessionDTO.userId();
+        this.user = user;
     }
 
-    public void updateFromDTO(SessionDTO sessionDTO){
+    public void updateFromDTO(SessionDTO sessionDTO, User user){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.userId = sessionDTO.userId();
+        this.user = user;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {

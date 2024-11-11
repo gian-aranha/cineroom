@@ -21,7 +21,7 @@ public record SessionReturnDTO(
                 session.getStatus().name(),
                 session.getContent(),
                 session.getCreatedAt().toString(),
-                session.getUserId()
+                session.getUser().getId()
         );
     }
 }

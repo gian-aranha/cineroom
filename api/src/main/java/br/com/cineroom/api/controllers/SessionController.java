@@ -4,6 +4,7 @@ import br.com.cineroom.api.dtos.session.SessionDTO;
 import br.com.cineroom.api.dtos.session.SessionReturnDTO;
 import br.com.cineroom.api.entities.Session;
 import br.com.cineroom.api.repositories.SessionRepository;
+import br.com.cineroom.api.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,18 @@ public class SessionController {
     @Autowired
     private SessionRepository sessionRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     // create new session
     @PostMapping
     @Transactional
     public ResponseEntity<?> createSession(@RequestBody @Valid SessionDTO sessionDTO, UriComponentsBuilder uriBuilder) {
-        Session session = new Session(sessionDTO);
-        session.setCreatedAt(LocalDateTime.now()); // Define a data de criação
+        var user = userRepository.findById(sessionDTO.userId())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Session session = new Session(sessionDTO, user);
+        session.setCreatedAt(LocalDateTime.now());
         sessionRepository.save(session);
 
         var uri = uriBuilder.path("/sessions/{id}").buildAndExpand(session.getId()).toUri();
@@ -72,8 +79,11 @@ public class SessionController {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
+        var user = userRepository.findById(sessionDTO.userId())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         return sessionRepository.findById(id).map(existingSession -> {
-            existingSession.updateFromDTO(sessionDTO);
+            existingSession.updateFromDTO(sessionDTO, user);
             sessionRepository.save(existingSession);
             return ResponseEntity.ok(new SessionReturnDTO(existingSession));
         }).orElseGet(() -> ResponseEntity.notFound().build());
