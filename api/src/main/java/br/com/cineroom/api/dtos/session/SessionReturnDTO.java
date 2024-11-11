@@ -10,7 +10,7 @@ public record SessionReturnDTO(
         String status,
         String content,
         String createdAt,
-        Long user
+        Long userId
 ) {
     public SessionReturnDTO(Session session) {
         this(
