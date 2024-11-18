@@ -1,7 +1,9 @@
 package br.com.cineroom.api.controllers;
 
+import br.com.cineroom.api.dtos.movie.MovieDTO;
 import br.com.cineroom.api.dtos.session.SessionDTO;
 import br.com.cineroom.api.dtos.session.SessionReturnDTO;
+import br.com.cineroom.api.entities.Movie;
 import br.com.cineroom.api.entities.Session;
 import br.com.cineroom.api.repositories.SessionRepository;
 import br.com.cineroom.api.repositories.UserRepository;
@@ -30,7 +32,7 @@ public class SessionController {
     @Transactional
     public ResponseEntity<?> createSession(@RequestBody @Valid SessionDTO sessionDTO, UriComponentsBuilder uriBuilder) {
         var user = userRepository.findById(sessionDTO.userId())
-            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         Session session = new Session(sessionDTO, user);
         session.setCreatedAt(LocalDateTime.now());
@@ -78,14 +80,34 @@ public class SessionController {
     // update session by ID
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
+    public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id,
+            @RequestBody @Valid SessionDTO sessionDTO) {
         var user = userRepository.findById(sessionDTO.userId())
-            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return sessionRepository.findById(id).map(existingSession -> {
             existingSession.updateFromDTO(sessionDTO, user);
             sessionRepository.save(existingSession);
             return ResponseEntity.ok(new SessionReturnDTO(existingSession));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Update movie field in session by ID
+    @PutMapping("/{id}/movie")
+    @Transactional
+    public ResponseEntity<SessionReturnDTO> updateSessionMovie(@PathVariable Long id,
+            @RequestBody @Valid MovieDTO movieDTO) {
+        return sessionRepository.findById(id).map(session -> {
+            Movie movie = new Movie();
+            movie.setId(movieDTO.id());
+            movie.setTitle(movieDTO.title());
+            movie.setImg(movieDTO.img());
+            movie.setOverview(movieDTO.overview());
+            movie.setVoteAverage(movieDTO.voteAverage());
+            session.setMovie(movie);
+
+            sessionRepository.save(session);
+            return ResponseEntity.ok(new SessionReturnDTO(session));
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import br.com.cineroom.api.entities.Movie;;
 
 @Table(name = "sessions")
 @Entity(name = "Session")
@@ -42,7 +43,17 @@ public class Session {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Session(SessionDTO sessionDTO, User user){
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "movie_id")),
+        @AttributeOverride(name = "title", column = @Column(name = "movie_title")),
+        @AttributeOverride(name = "img", column = @Column(name = "movie_img")),
+        @AttributeOverride(name = "overview", column = @Column(name = "movie_overview")),
+        @AttributeOverride(name = "voteAverage", column = @Column(name = "movie_vote_average"))
+    })
+    private Movie movie;
+
+    public Session(SessionDTO sessionDTO, User user) {
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
@@ -51,7 +62,7 @@ public class Session {
         this.user = user;
     }
 
-    public void updateFromDTO(SessionDTO sessionDTO, User user){
+    public void updateFromDTO(SessionDTO sessionDTO, User user) {
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
@@ -61,10 +72,14 @@ public class Session {
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
-        if(createdAt == null){
+        if (createdAt == null) {
             this.createdAt = LocalDateTime.now();
             return;
         }
         this.createdAt = createdAt;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 }
