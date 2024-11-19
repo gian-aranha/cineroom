@@ -23,6 +23,7 @@ public record SessionDTO(
     @Nullable
     LocalDateTime createdAt,
     @NotNull(message = "User cannot be null")
-    User user
+    User user,
+    Long movieId
 ){
 }

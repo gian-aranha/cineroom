@@ -2,9 +2,12 @@ package br.com.cineroom.api.controllers;
 
 import br.com.cineroom.api.dtos.session.SessionDTO;
 import br.com.cineroom.api.dtos.session.SessionReturnDTO;
+import br.com.cineroom.api.entities.Movie;
 import br.com.cineroom.api.entities.Session;
+import br.com.cineroom.api.repositories.MovieRepository;
 import br.com.cineroom.api.repositories.SessionRepository;
 import jakarta.validation.Valid;
+import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/sessions")
@@ -20,6 +24,9 @@ public class SessionController {
 
     @Autowired
     private SessionRepository sessionRepository;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
     // create new session
     @PostMapping
@@ -72,8 +79,16 @@ public class SessionController {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
+        Movie movie;
+        if (sessionDTO.movieId() != null) {
+            movie = movieRepository.getReferenceById(sessionDTO.movieId());
+        } else {
+            movie = null;
+        }
+
+
         return sessionRepository.findById(id).map(existingSession -> {
-            existingSession.updateFromDTO(sessionDTO);
+            existingSession.updateFromDTO(sessionDTO, movie);
             sessionRepository.save(existingSession);
             return ResponseEntity.ok(new SessionReturnDTO(existingSession));
         }).orElseGet(() -> ResponseEntity.notFound().build());
