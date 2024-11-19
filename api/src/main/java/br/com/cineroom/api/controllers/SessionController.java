@@ -98,15 +98,17 @@ public class SessionController {
     public ResponseEntity<SessionReturnDTO> updateSessionMovie(@PathVariable Long id,
             @RequestBody @Valid MovieDTO movieDTO) {
         return sessionRepository.findById(id).map(session -> {
-            Movie movie = new Movie();
-            movie.setId(movieDTO.id());
-            movie.setTitle(movieDTO.title());
-            movie.setImg(movieDTO.img());
-            movie.setOverview(movieDTO.overview());
-            movie.setVoteAverage(movieDTO.voteAverage());
+            Movie movie = new Movie(
+                    movieDTO.id(),
+                    movieDTO.title(),
+                    movieDTO.img(),
+                    movieDTO.overview(),
+                    movieDTO.voteAverage());
             session.setMovie(movie);
 
-            sessionRepository.save(session);
+            // Garantir que o contexto de persistência seja sincronizado
+            sessionRepository.saveAndFlush(session);
+
             return ResponseEntity.ok(new SessionReturnDTO(session));
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }

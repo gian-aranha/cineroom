@@ -1,7 +1,7 @@
 package br.com.cineroom.api.dtos.session;
 
 import br.com.cineroom.api.entities.Session;
-import br.com.cineroom.api.dtos.movie.MovieDTO;;
+import br.com.cineroom.api.dtos.movie.MovieDTO;
 
 public record SessionReturnDTO(
         Long id,
