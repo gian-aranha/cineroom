@@ -4,10 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record MovieDTO(
-    @NotNull Long id,
-    @NotBlank String title,
-    @NotBlank String img,
-    @NotBlank String overview,
-    @NotNull Double voteAverage
-) {}
 
+        @NotBlank
+        String title,
+        @NotBlank
+        String image,
+        @NotBlank
+        String overview,
+        @NotNull
+        Double rating
+) {
+}

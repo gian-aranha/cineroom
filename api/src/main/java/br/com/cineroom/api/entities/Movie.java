@@ -1,27 +1,34 @@
 package br.com.cineroom.api.entities;
 
-import jakarta.persistence.Embeddable;
+
+import br.com.cineroom.api.dtos.movie.MovieDTO;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Embeddable
+@Table(name = "movies")
+@Entity(name = "Movie")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@Setter
+@EqualsAndHashCode
 public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
-    private String img;
+    private String image;
     private String overview;
-    private Double voteAverage;
+    private Double rating;
 
-    public Movie(Long id, String title, String img, String overview, Double voteAverage) {
-        this.id = id;
-        this.title = title;
-        this.img = img;
-        this.overview = overview;
-        this.voteAverage = voteAverage;
-    }
-
-    public Movie() {
+    public Movie(MovieDTO movieDTO) {
+        this.title = movieDTO.title();
+        this.image = movieDTO.image();
+        this.overview = movieDTO.overview();
+        this.rating = movieDTO.rating();
     }
 }

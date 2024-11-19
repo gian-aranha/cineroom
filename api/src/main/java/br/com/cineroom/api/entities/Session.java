@@ -43,17 +43,12 @@ public class Session {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "id", column = @Column(name = "movie_id")),
-        @AttributeOverride(name = "title", column = @Column(name = "movie_title")),
-        @AttributeOverride(name = "img", column = @Column(name = "movie_img")),
-        @AttributeOverride(name = "overview", column = @Column(name = "movie_overview")),
-        @AttributeOverride(name = "voteAverage", column = @Column(name = "movie_vote_average"))
-    })
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    public Session(SessionDTO sessionDTO, User user) {
+    public Session(SessionDTO sessionDTO){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
@@ -62,13 +57,16 @@ public class Session {
         this.user = user;
     }
 
-    public void updateFromDTO(SessionDTO sessionDTO, User user) {
+
+    public void updateFromDTO(SessionDTO sessionDTO, Movie movie){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.user = user;
+        this.createdAt = sessionDTO.createdAt();
+        this.user = sessionDTO.user();
+        this.movie = sessionDTO.movieId() != null ? movie : null;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {

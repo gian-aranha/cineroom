@@ -16,7 +16,11 @@ public record SessionDTO(
     Status status,
     @NotBlank
     String content,
-    @NotNull(message = "User ID cannot be null")
-    Long userId
+
+    @Nullable
+    LocalDateTime createdAt,
+    @NotNull(message = "User cannot be null")
+    User user,
+    Long movieId
 ){
 }

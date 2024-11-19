@@ -11,8 +11,9 @@ public record SessionReturnDTO(
         String status,
         String content,
         String createdAt,
-        Long userId,
-        MovieDTO movie) {
+        String user,
+        Long movie_id
+) {
     public SessionReturnDTO(Session session) {
         this(
                 session.getId(),
@@ -22,14 +23,8 @@ public record SessionReturnDTO(
                 session.getStatus().name(),
                 session.getContent(),
                 session.getCreatedAt().toString(),
-                session.getUser().getId(),
-                session.getMovie() != null
-                        ? new MovieDTO(
-                                session.getMovie().getId(),
-                                session.getMovie().getTitle(),
-                                session.getMovie().getImg(),
-                                session.getMovie().getOverview(),
-                                session.getMovie().getVoteAverage())
-                        : null);
+                session.getUser().getUsername(),
+                session.getMovie() != null ? session.getMovie().getId() : null
+        );
     }
 }
