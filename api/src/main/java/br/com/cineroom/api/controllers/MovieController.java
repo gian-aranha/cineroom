@@ -1,6 +1,7 @@
 package br.com.cineroom.api.controllers;
 
 import br.com.cineroom.api.dtos.movie.MovieDTO;
+import br.com.cineroom.api.dtos.movie.MovieExistsDTO;
 import br.com.cineroom.api.dtos.movie.MovieReturnDTO;
 import br.com.cineroom.api.entities.Movie;
 import br.com.cineroom.api.repositories.MovieRepository;
@@ -38,6 +39,11 @@ public class MovieController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> createMovie(@RequestBody MovieDTO movieDTO, UriComponentsBuilder uriBuilder) {
+        var movieByTitle = movieRepository.findByTitle(movieDTO.title());
+        if (movieByTitle != null) {
+            return ResponseEntity.badRequest().body(new MovieExistsDTO("Movie already exists", movieByTitle.getId()));
+        }
+
         var movie = new Movie(movieDTO);
         movieRepository.save(movie);
 
