@@ -108,10 +108,25 @@ O projeto possui migrações de banco de dados, ou seja, todas as tabelas serão
     - GET
         - Pegar os filmes populares:
             `/`
+        - Pegar um filme específico salvo no banco de dados:
+            `/{id}`
     - POST
+        - Salvar um filme no banco de dados:
+            `/`
         - Pegar os filmes de acordo com gênero:
             `/by-genre` -> deve ser passado uma lista no corpo com os gêneros em inglês, dessa forma: `["action", "comedy", "drama"]`
             OBS: Não precisa do {} passa a lista direto mesmo
+      
+    - FORMATO OBJETO MOVIE salvo no banco
+    ```
+        {
+            "id": 123,
+            "title": "The Avengers",
+            "overview": "The Avengers is a great movie.",
+            "image": "/abc123.jpg",
+            "rating": 8.5
+        }
+    ```
 
 # Orientações
 - Os únicos endpoints que aceitam requisições sem token JWT são `/users` (POST) e `/login`
