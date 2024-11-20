@@ -34,6 +34,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/users").permitAll();
+                    req.requestMatchers("/ws/**").permitAll(); // Libera o WebSocket
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -56,6 +57,7 @@ public class SecurityConfigurations {
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cache-Control"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

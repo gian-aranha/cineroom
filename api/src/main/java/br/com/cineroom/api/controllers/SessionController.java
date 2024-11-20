@@ -6,8 +6,8 @@ import br.com.cineroom.api.entities.Movie;
 import br.com.cineroom.api.entities.Session;
 import br.com.cineroom.api.repositories.MovieRepository;
 import br.com.cineroom.api.repositories.SessionRepository;
+import br.com.cineroom.api.repositories.UserRepository;
 import jakarta.validation.Valid;
-import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/sessions")
@@ -26,14 +25,20 @@ public class SessionController {
     private SessionRepository sessionRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MovieRepository movieRepository;
 
     // create new session
     @PostMapping
     @Transactional
     public ResponseEntity<?> createSession(@RequestBody @Valid SessionDTO sessionDTO, UriComponentsBuilder uriBuilder) {
-        Session session = new Session(sessionDTO);
-        session.setCreatedAt(LocalDateTime.now()); // Define a data de criação
+        var user = userRepository.findById(sessionDTO.userId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Session session = new Session(sessionDTO, user);
+        session.setCreatedAt(LocalDateTime.now());
         sessionRepository.save(session);
 
         var uri = uriBuilder.path("/sessions/{id}").buildAndExpand(session.getId()).toUri();
@@ -78,14 +83,14 @@ public class SessionController {
     // update session by ID
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id, @RequestBody @Valid SessionDTO sessionDTO) {
+    public ResponseEntity<SessionReturnDTO> updateSession(@PathVariable Long id,
+            @RequestBody @Valid SessionDTO sessionDTO) {
         Movie movie;
         if (sessionDTO.movieId() != null) {
             movie = movieRepository.getReferenceById(sessionDTO.movieId());
         } else {
             movie = null;
         }
-
 
         return sessionRepository.findById(id).map(existingSession -> {
             existingSession.updateFromDTO(sessionDTO, movie);

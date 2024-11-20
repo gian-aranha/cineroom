@@ -1,13 +1,9 @@
 package br.com.cineroom.api.dtos.session;
 
-import br.com.cineroom.api.entities.User;
 import br.com.cineroom.api.utilities.Category;
 import br.com.cineroom.api.utilities.Status;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDateTime;
 
 public record SessionDTO(
     @NotBlank
@@ -20,10 +16,8 @@ public record SessionDTO(
     Status status,
     @NotBlank
     String content,
-    @Nullable
-    LocalDateTime createdAt,
-    @NotNull(message = "User cannot be null")
-    User user,
+    @NotNull(message = "User ID cannot be null")
+    Long userId,
     Long movieId
 ){
 }

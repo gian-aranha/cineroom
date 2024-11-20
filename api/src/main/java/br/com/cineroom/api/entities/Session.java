@@ -46,14 +46,13 @@ public class Session {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    public Session(SessionDTO sessionDTO){
+    public Session(SessionDTO sessionDTO, User user){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.createdAt = sessionDTO.createdAt();
-        this.user = sessionDTO.user();
+        this.user = user;
     }
 
     public void updateFromDTO(SessionDTO sessionDTO, Movie movie){
@@ -62,8 +61,7 @@ public class Session {
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.createdAt = sessionDTO.createdAt();
-        this.user = sessionDTO.user();
+        this.user = user;
         this.movie = sessionDTO.movieId() != null ? movie : null;
     }
 
@@ -73,5 +71,9 @@ public class Session {
             return;
         }
         this.createdAt = createdAt;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 }
