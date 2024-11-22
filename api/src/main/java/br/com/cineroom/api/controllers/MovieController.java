@@ -6,6 +6,7 @@ import br.com.cineroom.api.dtos.movie.MovieReturnDTO;
 import br.com.cineroom.api.entities.Movie;
 import br.com.cineroom.api.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import br.com.cineroom.api.services.MovieService;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/movies")
@@ -41,7 +43,9 @@ public class MovieController {
     public ResponseEntity<?> createMovie(@RequestBody MovieDTO movieDTO, UriComponentsBuilder uriBuilder) {
         var movieByTitle = movieRepository.findByTitle(movieDTO.title());
         if (movieByTitle != null) {
-            return ResponseEntity.badRequest().body(new MovieExistsDTO("Movie already exists", movieByTitle.getId()));
+            MovieExistsDTO errorResponse = new MovieExistsDTO("Movie already exists", movieByTitle.getId());
+            return ResponseEntity.badRequest()
+                    .body(errorResponse);
         }
 
         var movie = new Movie(movieDTO);
