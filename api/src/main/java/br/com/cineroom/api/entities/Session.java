@@ -42,24 +42,27 @@ public class Session {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Session(SessionDTO sessionDTO){
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
+
+    public Session(SessionDTO sessionDTO, User user){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.createdAt = sessionDTO.createdAt();
-        this.user = sessionDTO.user();
+        this.user = user;
     }
 
-    public void updateFromDTO(SessionDTO sessionDTO){
+    public void updateFromDTO(SessionDTO sessionDTO, Movie movie){
         this.code = sessionDTO.code();
         this.category = sessionDTO.category();
         this.usersLimit = sessionDTO.usersLimit();
         this.status = sessionDTO.status();
         this.content = sessionDTO.content();
-        this.createdAt = sessionDTO.createdAt();
-        this.user = sessionDTO.user();
+        this.user = user;
+        this.movie = sessionDTO.movieId() != null ? movie : null;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
@@ -68,5 +71,9 @@ public class Session {
             return;
         }
         this.createdAt = createdAt;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 }
